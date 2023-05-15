@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--  当前的父工程，也有一个SpringBoot下面的 父工程  -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.5</version>
+        <relativePath/> <!-- 父工程的相对路径： 从本地仓库中查询 lookup parent from repository -->
+    </parent>
+
+    <groupId>com.itheima</groupId>
+    <artifactId>tlias-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>  <!-- SNAPSHOT：快照版本的 maven私服仓库，功能不稳定，还处于开发的版本 -->
+    <packaging>pom</packaging>
+
+    <!-- 聚合（快速构建项目）其他模块， 统一打包管理，项目的构建操作（不用根据各个模块 Maven中的 Lifecycle操作，直接在聚合模块上操作） -->
+    <!--  先执行install,构建 jar文件到本地仓库（com包-itheima包-jar文件）， 再package对jar文件进行打包  -->
+    <modules>
+        <module>../tlias-pojo</module>
+        <module>../tlias-utils</module>
+        <module>../tlias-web-management</module>
+    </modules>
+
+
+    <!--统一管理依赖，配置版本 -->
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <lombok.version>1.18.24</lombok.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <aliyun.oss.version>3.15.1</aliyun.oss.version>
+        <jaxb.version>2.3.1</jaxb.version>
+        <activation.version>1.1.1</activation.version>
+        <jaxb.runtime.version>2.3.3</jaxb.runtime.version>
+        <web.version>2.7.5</web.version>
+    </properties>
+
+    <!--配置各个工程共有的依赖，子工程会自动继承父工程的依赖-->
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!--统一管理依赖版本-->
+    <dependencyManagement>
+        <dependencies>
+            <!--JWT令牌-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!--阿里云OSS-->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun.oss.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>${activation.version}</version>
+            </dependency>
+            <!-- no more than 2.3.3-->
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jaxb.runtime.version}</version>
+            </dependency>
+
+            <!-- spring-boot-starter-web 起步依赖（这里不需要配置）  由SpringBoot的父工程管理了web版本的依赖  -->
+
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <!--配置 上传 到 itheima私服的仓库地址 (在本地的Maven的 setting.xml 中配置对应的 itheima私服仓库)  -->
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>http://localhost:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>http://localhost:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>
